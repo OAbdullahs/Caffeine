@@ -1,16 +1,19 @@
-# This is a sample Python script.
+import customtkinter
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+customtkinter.set_appearance_mode("System")
 
+app = customtkinter.CTk()
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+window_height = 500
+window_width = 900
 
+screen_width = app.winfo_screenwidth()
+screen_height = app.winfo_screenheight()
 
-# Press the green button in the gutter to run the script.
+x_cordinate = int((screen_width/2) - (window_width/2))
+y_cordinate = int((screen_height/2) - (window_height/2))
+
+app.geometry("{}x{}+{}+{}".format(window_width, window_height, x_cordinate, y_cordinate))
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    app.mainloop()
