@@ -26,36 +26,36 @@ class TimeFrame:
         self.__time_interval_frame(app)
 
     def __time_interval_frame(self, app):
-        main_frame = customtkinter.CTkFrame(master=app)
-        main_frame.grid(row=0, column=1, pady=20, padx=20)
+        timer_label = customtkinter.CTkLabel(text="Select a time", master=app)
+        timer_label.grid(row=0, column=0, sticky="w")
 
-        timer_label = customtkinter.CTkLabel(text="Select a time", master=main_frame)
-        timer_label.grid(row=1, column=1)
+        main_frame = customtkinter.CTkFrame(master=app)
+        main_frame.grid(row=1, column=0, padx=20)
 
         indefinitely_label = customtkinter.CTkLabel(text="Indefinitely:", master=main_frame)
-        indefinitely_label.grid(row=2, column=1)
+        indefinitely_label.grid(row=0, column=1)
 
         self.indefinitely_button = customtkinter.CTkButton(text="Enable", master=main_frame,
                                                            command=self.__on_indefinitely_button_clicked)
-        self.indefinitely_button.grid(row=2, column=2)
+        self.indefinitely_button.grid(row=0, column=2, pady=5)
 
         until_label = customtkinter.CTkLabel(text="Time/Until:", master=main_frame)
-        until_label.grid(row=3, column=1)
+        until_label.grid(row=1, column=1)
 
         vcmd = main_frame.register(_is_entry_only_digit)
         on_invalid_hours_cmd = main_frame.register(self.__in_on_invalid_hours_value)
         on_invalid_minutes_cmd = main_frame.register(self.__in_on_invalid_minutes_value)
         self.hours_entry = customtkinter.CTkEntry(placeholder_text="Hours", master=main_frame, validate='focusout',
                                                   validatecommand=(vcmd, "%P"), invalidcommand=on_invalid_hours_cmd)
-        self.hours_entry.grid(row=3, column=2, pady=10)
+        self.hours_entry.grid(row=1, column=2, pady=10)
 
         self.minutes_entry = customtkinter.CTkEntry(placeholder_text="Minutes", master=main_frame, validate='focusout',
                                                     validatecommand=(vcmd, "%P"), invalidcommand=on_invalid_minutes_cmd)
-        self.minutes_entry.grid(row=3, column=3, padx=10)
+        self.minutes_entry.grid(row=1, column=3, padx=10)
 
         self.time_button = customtkinter.CTkButton(master=main_frame, text="Start session",
                                                    command=self.__on_start_session_clicked)
-        self.time_button.grid(row=3, column=4, padx=10)
+        self.time_button.grid(row=1, column=4, padx=10)
 
         self.remaining_time_frame = customtkinter.CTkFrame(master=app)
         self.remaining_time_message_label = customtkinter.CTkLabel(master=self.remaining_time_frame, text="")
@@ -92,7 +92,7 @@ class TimeFrame:
             minutes_value = 0 if (minutes_text == "Minutes" or minutes_text == " ") else int(minutes_text)
 
             if hours_value + minutes_value > 0:
-                self.remaining_time_frame.grid(row=0, column=2, sticky="nsew", pady=20)
+                self.remaining_time_frame.grid(row=1, column=2, sticky="nsew")
                 self.time_button.set_text("End session")
                 self.__toggle_wakeup_device()
                 self.indefinitely_button.state = tkinter.DISABLED
