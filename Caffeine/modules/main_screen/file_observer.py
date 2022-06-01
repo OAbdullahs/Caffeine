@@ -5,7 +5,7 @@ import customtkinter
 import tkinter
 from tkinter.filedialog import askopenfilename
 
-from modules.caffeine.caffeine import _enable_coffeine, _disable_coffeine
+from modules.caffeine.caffeine import enable_coffeine, disable_coffeine
 from shared.file_watcher import MyWatchDog
 
 
@@ -40,10 +40,10 @@ class FileObserverFrame:
             my_watcher = MyWatchDog(filepath)
             my_watcher.on_finish_callback = self.__on_file_watch_complete
             threading.Thread(target=my_watcher.run).start()
-            threading.Thread(target=_enable_coffeine).start()
+            threading.Thread(target=enable_coffeine).start()
         else:
             self.watching_status_frame.grid_forget()
 
     def __on_file_watch_complete(self, filename):
-        threading.Thread(target=_disable_coffeine).start()
+        threading.Thread(target=disable_coffeine).start()
         self.watching_status_label["text"] = f"Done Watching: \n{filename}"

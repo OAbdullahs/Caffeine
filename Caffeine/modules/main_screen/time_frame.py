@@ -3,7 +3,7 @@ from tkinter import messagebox
 import customtkinter
 import threading
 import datetime
-from modules.caffeine.caffeine import (_enable_coffeine, _disable_coffeine)
+from modules.caffeine.caffeine import (enable_coffeine, disable_coffeine)
 from shared.timer import (start_timer, cancel_timer)
 
 
@@ -67,9 +67,9 @@ class TimeFrame:
 
     def __toggle_wakeup_device(self):
         if not self.__is_indefinitely_enabled:
-            threading.Thread(target=_enable_coffeine).start()
+            threading.Thread(target=enable_coffeine).start()
         else:
-            threading.Thread(target=_disable_coffeine).start()
+            threading.Thread(target=disable_coffeine).start()
 
         self.__is_indefinitely_enabled = not self.__is_indefinitely_enabled
 
