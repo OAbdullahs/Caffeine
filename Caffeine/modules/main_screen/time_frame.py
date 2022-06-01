@@ -1,5 +1,5 @@
 import tkinter
-
+from tkinter import messagebox
 import customtkinter
 import threading
 import datetime
@@ -27,7 +27,7 @@ class TimeFrame:
 
     def __time_interval_frame(self, app):
         main_frame = customtkinter.CTkFrame(master=app)
-        main_frame.pack(pady=20, padx=60, fill="both", expand=False, anchor="w")
+        main_frame.grid(row=0, column=1, pady=20, padx=20)
 
         timer_label = customtkinter.CTkLabel(text="Select a time", master=main_frame)
         timer_label.grid(row=1, column=1)
@@ -57,8 +57,9 @@ class TimeFrame:
                                                    command=self.__on_start_session_clicked)
         self.time_button.grid(row=3, column=4, padx=10)
 
-        self.remaining_time_message = customtkinter.CTkLabel(master=main_frame, text="")
-        self.remaining_time_message.grid(row=2, column=30)
+        self.remaining_time_frame = customtkinter.CTkFrame(master=app)
+        self.remaining_time_message_label = customtkinter.CTkLabel(master=self.remaining_time_frame, text="")
+        self.remaining_time_message_label.pack(side=tkinter.TOP, expand=tkinter.YES, fill=tkinter.BOTH)
 
     def __on_indefinitely_button_clicked(self):
         self.indefinitely_button.set_text("Enable" if self.__is_indefinitely_enabled else "Disable")
@@ -82,14 +83,22 @@ class TimeFrame:
         if self.__is_timer_on:
             self.time_button.set_text("Start session")
             cancel_timer()
+            self.__is_timer_on = False
+            self.remaining_time_frame.grid_forget()
         else:
-            self.time_button.set_text("End session")
-            hours_value = 0 if self.hours_entry.entry.get() == "Hours" else self.hours_entry.entry.get()
-            minutes_value = self.minutes_entry.entry.get()
-            self.__toggle_wakeup_device()
-            self.indefinitely_button.state = tkinter.DISABLED
-            threading.Thread(target=start_timer, args=(hours_value, minutes_value, self.update_remaining_time)).start()
-        self.__is_timer_on = True
+            hours_value = 0 if self.hours_entry.entry.get() == "Hours" else int(self.hours_entry.entry.get())
+            minutes_value = 0 if self.minutes_entry.entry.get() == "Minutes" else int(self.minutes_entry.entry.get())
+
+            if hours_value + minutes_value > 0:
+                self.remaining_time_frame.grid(row=0, column=2, sticky="nsew", pady=20)
+                self.time_button.set_text("End session")
+                self.__toggle_wakeup_device()
+                self.indefinitely_button.state = tkinter.DISABLED
+                threading.Thread(target=start_timer,
+                                 args=(hours_value, minutes_value, self.update_remaining_time)).start()
+                self.__is_timer_on = True
+            else:
+                messagebox.showerror("Error", "Time interval can't be empty")
 
     def update_remaining_time(self, remaining_seconds):
         hours, minutes, seconds = str(datetime.timedelta(seconds=remaining_seconds)).split(':')
@@ -99,10 +108,11 @@ class TimeFrame:
         seconds_text = "" if seconds == "0" else f"{seconds}:s"
 
         text = f"Current session ends in: \n {hours_text} {minutes_text} {seconds_text}"
-        self.remaining_time_message["text"] = text
+        self.remaining_time_message_label["text"] = text
 
         if remaining_seconds == 0:
-            self.remaining_time_message["text"] = ""
+            self.remaining_time_message_label["text"] = ""
+            self.remaining_time_frame.grid_forget()
             self.__is_timer_on = False
             self.indefinitely_button.state = tkinter.NORMAL
             self.__toggle_wakeup_device()
