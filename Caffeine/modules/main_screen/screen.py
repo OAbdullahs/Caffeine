@@ -56,7 +56,7 @@ class MainScreen:
                                               command=self.__on_start_session_clicked)
         time_button.grid(row=3, column=4, padx=10)
 
-        self.remaining_time_message = customtkinter.CTkLabel(master=main_frame)
+        self.remaining_time_message = customtkinter.CTkLabel(master=main_frame, text="")
         self.remaining_time_message.grid(row=2, column=30)
 
     def __on_indefinitely_button_clicked(self):
