@@ -27,7 +27,7 @@ class TimeFrame:
 
     def __time_interval_frame(self, app):
         timer_label = customtkinter.CTkLabel(text="Select a time", master=app)
-        timer_label.grid(row=0, column=0, sticky="w")
+        timer_label.grid(row=0, column=0, ipadx=1, sticky="w")
 
         main_frame = customtkinter.CTkFrame(master=app)
         main_frame.grid(row=1, column=0, padx=20)
