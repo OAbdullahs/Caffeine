@@ -4,7 +4,7 @@ import customtkinter
 import threading
 import datetime
 from modules.caffeine.caffeine import (_enable_coffeine, _disable_coffeine)
-from shared.timer import start_timer
+from shared.timer import (start_timer, cancel_timer)
 
 
 def _is_entry_only_digit(value):
@@ -19,6 +19,7 @@ def _is_entry_only_digit(value):
 
 class TimeFrame:
     __is_indefinitely_enabled = False
+    __is_timer_on = False
 
     def __init__(self, app: customtkinter.CTk):
         app.title("Coffiene")
@@ -52,9 +53,9 @@ class TimeFrame:
                                                     validatecommand=(vcmd, "%P"), invalidcommand=on_invalid_minutes_cmd)
         self.minutes_entry.grid(row=3, column=3, padx=10)
 
-        time_button = customtkinter.CTkButton(master=main_frame, text="Start session",
-                                              command=self.__on_start_session_clicked)
-        time_button.grid(row=3, column=4, padx=10)
+        self.time_button = customtkinter.CTkButton(master=main_frame, text="Start session",
+                                                   command=self.__on_start_session_clicked)
+        self.time_button.grid(row=3, column=4, padx=10)
 
         self.remaining_time_message = customtkinter.CTkLabel(master=main_frame, text="")
         self.remaining_time_message.grid(row=2, column=30)
@@ -78,11 +79,17 @@ class TimeFrame:
         self.minutes_entry.delete(0, tkinter.END)
 
     def __on_start_session_clicked(self):
-        hours_value = 0 if self.hours_entry.entry.get() == "Hours" else self.hours_entry.entry.get()
-        minutes_value = self.minutes_entry.entry.get()
-        self.__toggle_wakeup_device()
-        self.indefinitely_button.state = tkinter.DISABLED
-        threading.Thread(target=start_timer, args=(hours_value, minutes_value, self.update_remaining_time)).start()
+        if self.__is_timer_on:
+            self.time_button.set_text("Start session")
+            cancel_timer()
+        else:
+            self.time_button.set_text("End session")
+            hours_value = 0 if self.hours_entry.entry.get() == "Hours" else self.hours_entry.entry.get()
+            minutes_value = self.minutes_entry.entry.get()
+            self.__toggle_wakeup_device()
+            self.indefinitely_button.state = tkinter.DISABLED
+            threading.Thread(target=start_timer, args=(hours_value, minutes_value, self.update_remaining_time)).start()
+        self.__is_timer_on = True
 
     def update_remaining_time(self, remaining_seconds):
         hours, minutes, seconds = str(datetime.timedelta(seconds=remaining_seconds)).split(':')
@@ -96,5 +103,6 @@ class TimeFrame:
 
         if remaining_seconds == 0:
             self.remaining_time_message["text"] = ""
+            self.__is_timer_on = False
             self.indefinitely_button.state = tkinter.NORMAL
             self.__toggle_wakeup_device()
