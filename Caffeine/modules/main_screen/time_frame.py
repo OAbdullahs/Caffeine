@@ -17,7 +17,7 @@ def _is_entry_only_digit(value):
         return False
 
 
-class MainScreen:
+class TimeFrame:
     __is_indefinitely_enabled = False
 
     def __init__(self, app: customtkinter.CTk):

@@ -1,5 +1,5 @@
 import customtkinter
-from modules.main_screen import screen
+from modules.main_screen import time_frame
 customtkinter.set_appearance_mode("System")
 
 app = customtkinter.CTk()
@@ -16,5 +16,5 @@ y_cordinate = int((screen_height/2) - (window_height/2))
 app.geometry("{}x{}+{}+{}".format(window_width, window_height, x_cordinate, y_cordinate))
 
 if __name__ == '__main__':
-    screen.MainScreen(app)
+    time_frame.TimeFrame(app)
     app.mainloop()
