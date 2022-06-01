@@ -81,6 +81,7 @@ class TimeFrame:
         hours_value = 0 if self.hours_entry.entry.get() == "Hours" else self.hours_entry.entry.get()
         minutes_value = self.minutes_entry.entry.get()
         self.__toggle_wakeup_device()
+        self.indefinitely_button.state = tkinter.DISABLED
         threading.Thread(target=start_timer, args=(hours_value, minutes_value, self.update_remaining_time)).start()
 
     def update_remaining_time(self, remaining_seconds):
@@ -95,4 +96,5 @@ class TimeFrame:
 
         if remaining_seconds == 0:
             self.remaining_time_message["text"] = ""
+            self.indefinitely_button.state = tkinter.NORMAL
             self.__toggle_wakeup_device()
