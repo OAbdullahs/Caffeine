@@ -86,8 +86,10 @@ class TimeFrame:
             self.__is_timer_on = False
             self.remaining_time_frame.grid_forget()
         else:
-            hours_value = 0 if self.hours_entry.entry.get() == "Hours" else int(self.hours_entry.entry.get())
-            minutes_value = 0 if self.minutes_entry.entry.get() == "Minutes" else int(self.minutes_entry.entry.get())
+            hours_text = str(self.hours_entry.entry.get())
+            minutes_text = str(self.minutes_entry.entry.get())
+            hours_value = 0 if (hours_text == "Hours" or hours_text == " ") else int(hours_text)
+            minutes_value = 0 if (minutes_text == "Minutes" or minutes_text == " ") else int(minutes_text)
 
             if hours_value + minutes_value > 0:
                 self.remaining_time_frame.grid(row=0, column=2, sticky="nsew", pady=20)
