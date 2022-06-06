@@ -18,7 +18,7 @@ class MyWatchDog:
         self.filepath = filepath
 
     def run(self):
-        print("Watching " + self.filepath)
+        print("Watching " + self.filepath + "\n")
         self.event_handler.filepath = self.filepath
         self.observer.schedule(self.event_handler, os.path.dirname(self.filepath), recursive=True)
         self.observer.start()
@@ -44,4 +44,5 @@ class Handler(FileSystemEventHandler):
 
     def on_any_event(self, event):
         if event.src_path == self.filepath:
+            print(str(event))
             self.on_finish_callback()

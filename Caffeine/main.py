@@ -1,6 +1,6 @@
 import customtkinter
 from PIL import Image, ImageTk
-from modules.main_screen import (time_frame, file_observer)
+from modules.main_screen import (time_frame, file_observer, application_observer)
 
 customtkinter.set_appearance_mode("System")
 
@@ -21,4 +21,5 @@ app.wm_iconphoto(False, ImageTk.PhotoImage(Image.open("icons/caffeine.ico")))
 if __name__ == '__main__':
     time_frame.TimeFrame(app)
     file_observer.FileObserverFrame(app)
+    # application_observer.ProcessObserverFrame(app)
     app.mainloop()
