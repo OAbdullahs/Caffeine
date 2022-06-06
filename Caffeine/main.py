@@ -1,7 +1,12 @@
 import customtkinter
 from PIL import Image, ImageTk
 from modules.main_screen import (time_frame, file_observer, application_observer)
+import logging
 
+logging.basicConfig(
+                    format='%(name)s - %(levelname)s - %(message)s',
+                    datefmt='%d-%b-%y %H:%M:%S',
+                    level=logging.DEBUG)
 customtkinter.set_appearance_mode("System")
 
 app = customtkinter.CTk()

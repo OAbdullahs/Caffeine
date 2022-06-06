@@ -1,3 +1,4 @@
+import logging
 import os
 import time
 from watchdog.observers import Observer
@@ -18,7 +19,7 @@ class MyWatchDog:
         self.filepath = filepath
 
     def run(self):
-        print("Watching " + self.filepath + "\n")
+        logging.info("Watching " + self.filepath)
         self.event_handler.filepath = self.filepath
         self.observer.schedule(self.event_handler, os.path.dirname(self.filepath), recursive=True)
         self.observer.start()
@@ -27,12 +28,12 @@ class MyWatchDog:
                 time.sleep(1)
         except:
             self.observer.stop()
-            print("Observer Stopped")
+            logging.error("Observer Stopped")
 
         self.observer.join()
 
     def on_finish(self):
-        print("Stopped watching " + self.filepath)
+        logging.info("Stopped watching " + self.filepath)
         self.__keep_watching = False
         self.observer.stop()
         self.on_finish_callback(os.path.basename(self.filepath))
