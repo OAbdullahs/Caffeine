@@ -43,7 +43,18 @@ class Handler(FileSystemEventHandler):
     filepath = None
     on_finish_callback = None
 
-    def on_any_event(self, event):
+    def on_created(self, event):
+        logging.info("on_created")
         if event.src_path == self.filepath:
-            print(str(event))
+            logging.info(f"file: {event.src_path} || on_created")
             self.on_finish_callback()
+
+    def on_modified(self, event):
+        logging.info("on_modified")
+        if event.src_path == self.filepath:
+            logging.info(f"file: {event.src_path} || on_modified")
+            # TODO (IDK but you know)
+
+    def on_any_event(self, event):
+        message = f"on_any_event  file: {event.src_path} \n event: {event}"
+        logging.info(message)
