@@ -3,10 +3,10 @@ import pycaffeine
 
 
 def enable_coffeine():
-    logging.info("Starting caffeinate on Mac OS")
-    pycaffeine.keep_awake(True)
+    logging.info("Starting caffeine")
+    pycaffeine.keep_awake(keep_screen_on=True)
 
 
 def disable_coffeine():
-    logging.info("Disabling caffeinate on Mac OS ")
+    logging.info("Disabling caffeine")
     pycaffeine.stop_keep_awake()
