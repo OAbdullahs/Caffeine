@@ -1,15 +1,12 @@
-import wakepy
 import logging
+import pycaffeine
 
 
 def enable_coffeine():
     logging.info("Starting caffeinate on Mac OS")
-    wakepy.set_keepawake(True)
+    pycaffeine.keep_awake(True)
 
 
 def disable_coffeine():
     logging.info("Disabling caffeinate on Mac OS ")
-    wakepy.unset_keepawake()
-
-
-
+    pycaffeine.stop_keep_awake()
