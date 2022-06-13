@@ -6,7 +6,7 @@ __version__ = "0.0.1"
 __status__ = "dev"
 
 logging.basicConfig(
-    filename="Caffeine.log",
+    # filename="Caffeine.log",
     format='%(name)s - %(levelname)s - %(message)s',
     datefmt='%d-%b-%y %H:%M:%S',
     level=logging.DEBUG)

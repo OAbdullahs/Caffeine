@@ -35,9 +35,9 @@ class FileObserverFrame:
         tkinter.Tk().withdraw()
         filepath = askopenfilename()
         if filepath != "":
-            self.watching_status_frame.grid(row=5, column=1, sticky="nsew")
-            self.watching_status_label["text"] = f"Watching: \n{os.path.basename(filepath)}"
             my_watcher = MyWatchDog(filepath)
+            self.watching_status_frame.grid(row=5, column=1, sticky="nsew")
+            self.watching_status_label["text"] = f"Watching: \n{my_watcher.get_file_name()}"
             my_watcher.on_finish_callback = self.__on_file_watch_complete
             threading.Thread(target=my_watcher.run).start()
             threading.Thread(target=enable_coffeine).start()
