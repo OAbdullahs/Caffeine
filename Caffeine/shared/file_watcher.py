@@ -57,6 +57,11 @@ class MyWatchDog:
         self.observer.stop()
         self.on_finish_callback(os.path.basename(self.filepath))
 
+    def force_stop_watching(self):
+        logging.info("Force stop watching " + self.__filename)
+        self.__keep_watching = False
+        self.observer.stop()
+
 
 class Handler(FileSystemEventHandler):
     __filename = None
