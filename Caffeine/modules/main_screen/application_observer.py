@@ -6,10 +6,11 @@ import tkinter
 from PIL import Image, ImageTk, ImageOps, ImageDraw
 
 from modules.caffeine.caffeine import enable_coffeine, disable_coffeine
-from pyprocess import get_all_running_applications, get_applications_model
+from pyprocess import get_all_running_applications, update_list
 
 
 class ProcessObserverFrame:
+    __is_caffeine_on = False
 
     def __init__(self, app: customtkinter.CTk, application_path):
         self.application_path = application_path
@@ -43,6 +44,21 @@ class ProcessObserverFrame:
         application_icon.pack(side=tkinter.LEFT)
         application_name_label = customtkinter.CTkLabel(master=application_frame, text=application.name)
         application_name_label.pack(side=tkinter.LEFT)
-        application_watch_button = customtkinter.CTkButton(master=application_frame, text="Watch")
+        application_watch_button = customtkinter.CTkButton(master=application_frame,
+                                                           text="Watch" if not application.is_being_watched() else "Stop watching")
+        application_watch_button.config(
+            command=lambda pid=application.pid, button=application_watch_button: self.on_watch_clicked(pid, button))
         application_watch_button.pack(side=tkinter.RIGHT, padx=5)
         return application_frame
+
+    def on_watch_clicked(self, pid, button):
+        if not self.__is_caffeine_on:
+            button.set_text("Stop Watching")
+            threading.Thread(target=enable_coffeine).start()
+            update_list(pid, True)
+            self.__is_caffeine_on = True
+        else:
+            self.__is_caffeine_on = False
+            threading.Thread(target=disable_coffeine).start()
+            update_list(pid, False)
+            button.set_text("Watch")

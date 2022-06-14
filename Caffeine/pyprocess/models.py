@@ -9,6 +9,7 @@ class ApplicationModel:
     fullname: str
     name: str
     pid: int
+    __is_being_watched = False
     __IMAGES_EXT = [".ico", ".icns"]
     __COMMON_ICON_NAME = "AppIcon"
 
@@ -35,3 +36,9 @@ class ApplicationModel:
 
         # TODO ADD MISSING IMAGE
         return None
+
+    def is_being_watched(self):
+        return self.__is_being_watched
+
+    def set_watching(self, watching):
+        self.__is_being_watched = watching
