@@ -1,6 +1,9 @@
 import os
 
 import customtkinter
+from PIL import ImageTk
+from PIL import Image
+
 from modules.main_screen import (time_frame, file_observer, application_observer)
 import logging
 
@@ -29,6 +32,7 @@ x_cordinate = int((screen_width / 2) - (window_width / 2))
 y_cordinate = int((screen_height / 2) - (window_height / 2))
 
 app.geometry("{}x{}+{}+{}".format(window_width, window_height, x_cordinate, y_cordinate))
+app.wm_iconphoto(False, ImageTk.PhotoImage(Image.open(application_path + "/Resources/caffeine.ico")))
 
 if __name__ == '__main__':
     time_frame.TimeFrame(app)

@@ -1,6 +1,9 @@
 __version__ = "0.0.1"
 
+import logging
 import platform
+import time
+
 import psutil
 import getpass
 
@@ -19,12 +22,20 @@ else:
         f"pyprocess has not yet a {SYSTEM} implementation. Pull requests welcome: https://github.com/np-8/wakepy"
     )
 
-__applications_model: list[ApplicationModel]
+__applications_model: list[ApplicationModel] = list()
 
 
-def get_all_running_applications():
+def get_all_running_applications(result):
     global __applications_model
-    __applications_model = get_running_applications(psutil.process_iter(), getpass.getuser())
+    try:
+        while True:
+            application_result = get_running_applications(psutil.process_iter(), getpass.getuser())
+            if __applications_model != application_result:
+                result(application_result)
+                __applications_model = application_result
+            time.sleep(5)
+    except:
+        logging.error("Getting applications stopped")
 
 
 def watch_application(name):

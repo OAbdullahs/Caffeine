@@ -13,9 +13,8 @@ class ProcessObserverFrame:
 
     def __init__(self, app: customtkinter.CTk, application_path):
         self.application_path = application_path
-        get_all_running_applications()
+        threading.Thread(target=get_all_running_applications, args=(self.__init_applications,)).start()
         self.__setup(app)
-        self.__init_applications()
 
     def __setup(self, app):
         customtkinter.CTkLabel(text="", master=app, height=1).grid(row=6, column=0)
@@ -24,11 +23,15 @@ class ProcessObserverFrame:
         self.main_frame = customtkinter.CTkFrame(master=app)
         self.main_frame.grid(row=8, column=0, padx=20, sticky="we")
 
-    def __init_applications(self):
-        applications = get_applications_model()
+    def __init_applications(self, applications):
+        self.__clear_frame_widget()
         for application in applications:
             application_frame = self.application_frame(application)
             application_frame.pack(fill=tkinter.X, pady=5, padx=5)
+
+    def __clear_frame_widget(self):
+        for widget in self.main_frame.winfo_children():
+            widget.destroy()
 
     def application_frame(self, application):
         application_frame = customtkinter.CTkFrame(master=self.main_frame)
