@@ -1,3 +1,5 @@
+import os
+
 import customtkinter
 from modules.main_screen import (time_frame, file_observer, application_observer)
 import logging
@@ -15,6 +17,7 @@ logging.critical(f"caffeine version:{__version__}, status:{__status__}")
 customtkinter.set_appearance_mode("System")
 
 app = customtkinter.CTk()
+application_path = os.path.dirname(os.path.realpath(__file__))
 
 window_height = 500
 window_width = 900
@@ -30,5 +33,5 @@ app.geometry("{}x{}+{}+{}".format(window_width, window_height, x_cordinate, y_co
 if __name__ == '__main__':
     time_frame.TimeFrame(app)
     file_observer.FileObserverFrame(app)
-    # application_observer.ProcessObserverFrame(app)
+    application_observer.ProcessObserverFrame(app, application_path)
     app.mainloop()

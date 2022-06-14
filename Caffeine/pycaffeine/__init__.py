@@ -12,7 +12,7 @@ elif SYSTEM == "darwin":
     from ._darwin import set_keep_awake, unset_keep_awake
 else:
     NotImplementedError(
-        f"wakepy has not yet a {SYSTEM} implementation. Pull requests welcome: https://github.com/np-8/wakepy"
+        f"pycaffeine has not yet a {SYSTEM} implementation. Pull requests welcome: https://github.com/np-8/wakepy"
     )
 
 
