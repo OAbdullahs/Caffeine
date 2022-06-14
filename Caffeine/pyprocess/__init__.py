@@ -54,6 +54,9 @@ def update_list(pid, watch):
     global __applications_model
     global __being_watched
 
+    if pid == 0:
+        __being_watched = ("", False)
+
     for application in __applications_model:
         if application.pid == pid:
             __being_watched = (application.fullname, watch)
