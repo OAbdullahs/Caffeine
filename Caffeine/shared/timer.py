@@ -1,5 +1,5 @@
 import time
-
+import shared.falgs as flags
 __is_timer_canceled = False
 
 
@@ -15,7 +15,7 @@ def start_timer(hours, minutes, callback):
         callback(remaining_seconds)
         time.sleep(1)
 
-        if __is_timer_canceled:
+        if __is_timer_canceled or flags.exit_flag:
             callback(0)
             break
 

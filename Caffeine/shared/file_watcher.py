@@ -5,6 +5,7 @@ import time
 from .helper import remove_suffix
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+import shared.falgs as flags
 
 DOWNLOADING_TYPES = [".part"]
 
@@ -43,7 +44,7 @@ class MyWatchDog:
         self.observer.schedule(self.event_handler, os.path.dirname(self.filepath), recursive=True)
         self.observer.start()
         try:
-            while self.__keep_watching:
+            while self.__keep_watching and not flags.exit_flag:
                 time.sleep(1)
         except:
             self.observer.stop()

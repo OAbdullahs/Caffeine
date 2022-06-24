@@ -7,6 +7,8 @@ import time
 import psutil
 import getpass
 
+import shared.falgs as flags
+
 from .models import ApplicationModel
 
 SYSTEM = platform.system().lower()
@@ -26,28 +28,27 @@ __applications_model: list[ApplicationModel] = list()
 __being_watched = ("", False)
 
 
-def get_all_running_applications(result):
+def get_all_running_applications(result, on_watch_application_closed):
     global __applications_model
+    global __being_watched
+    is_being_watched_closed = True
     try:
-        while True:
+        while True and not flags.exit_flag:
             applications_result = get_running_applications(psutil.process_iter(), getpass.getuser())
             if __applications_model != applications_result:
                 for application in applications_result:
                     if __being_watched[0] == application.fullname:
+                        if __being_watched[0] != "":
+                            is_being_watched_closed = False
                         application.set_watching(__being_watched[1])
                 result(applications_result)
                 __applications_model = applications_result
-            time.sleep(5)
+            time.sleep(5)  # TODO Reduce time
+            if is_being_watched_closed and __being_watched[0] != "":
+                on_watch_application_closed(__being_watched[0])
+                __being_watched = ("", False)
     except:
         logging.error("Getting applications stopped")
-
-
-def watch_application(name):
-    global __applications_model
-    for application_model in __applications_model:
-        if name == application_model.name:
-            # TODO ADD IMPL
-            pass
 
 
 def update_list(pid, watch):

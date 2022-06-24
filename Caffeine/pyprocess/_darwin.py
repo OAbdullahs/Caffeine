@@ -29,5 +29,5 @@ def get_running_applications(proc_iter, username):
                             applications_model.append(application_model)
                         break
         except psutil.AccessDenied:
-            logging.warning(f"Access denied for process: {process.name}")
+            pass
     return applications_model

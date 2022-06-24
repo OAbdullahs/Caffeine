@@ -15,7 +15,7 @@ class ProcessObserverFrame:
     def __init__(self, app: customtkinter.CTk, application_path):
         self.application_path = application_path
         threading.Thread(target=get_all_running_applications,
-                         args=(self.__init_applications,)).start()
+                         args=(self.__init_applications, self.on_watch_application_closed)).start()
         self.__setup(app)
 
     def __setup(self, app):
@@ -24,6 +24,11 @@ class ProcessObserverFrame:
         application_observer_label.grid(row=7, column=0, ipadx=12, sticky="w")
         self.main_frame = customtkinter.CTkFrame(master=app)
         self.main_frame.grid(row=8, column=0, padx=20, sticky="we")
+        # self.main_frame.pack_propagate(0)
+
+        # self.scrollbar = tkinter.Scrollbar(master=self.main_frame, orient=tkinter.VERTICAL)
+        # self.scrollbar.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+        # self.scrollbar.config(command=self.main_frame.yview)
 
     def __init_applications(self, applications):
         self.__clear_frame_widget()
@@ -66,3 +71,8 @@ class ProcessObserverFrame:
             threading.Thread(target=disable_coffeine).start()
             update_list(pid, False)
             button.set_text("Watch")
+
+    def on_watch_application_closed(self, name):
+        logging.info("Stopped watching: " + name)
+        threading.Thread(target=disable_coffeine).start()
+        self.__is_caffeine_on = False
